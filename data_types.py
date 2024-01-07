@@ -28,13 +28,13 @@ class Value():
         x._backward = _backward
 
         return x
-    
+
     def __neg__(self):
         return self * -1
-    
+
     def __sub__(self, other):
         return self + (-other)
-    
+
     def __rsub__(self, other):
         return other + (-self)
 
@@ -105,10 +105,10 @@ class Neuron():
         forward = sum([wi * xi for wi, xi in zip(self.ws, xs)], self.b)
         activation = forward.tanh()
         return activation
-    
+
     def parameters(self):
         return self.ws + [self.b]
-    
+
 
 class Layer():
     def __init__(self, number_inputs, number_neurons):
@@ -117,24 +117,24 @@ class Layer():
     def __call__(self, x):
         output = [neuron(x) for neuron in self.neurons]
         return output[0] if len(output) == 1 else output
-    
+
     def parameters(self):
         return [p for n in self.neurons for p in n.parameters()]
 
-    
+
 class Network():
     def __init__(self, neurons_in, neurons_out):
         sz = [neurons_in] + neurons_out
         self.layers = [Layer(sz[i], sz[i+1]) for i in range(len(neurons_out))]
-    
+
     def __call__(self, x):
         for layer in self.layers:
             x = layer(x)
         return x
-    
+
     def parameters(self):
         return [p for layer in self.layers for p in layer.parameters()]
-    
+
     def train(self, xs, y_true, epochs=20, lr=.01, verbose=False):
         for e in range(epochs):
             self.zero_grad()
@@ -150,7 +150,7 @@ class Network():
         print(f"""
 Epoch: {e}
 Loss: {losses.data}""")
-    
+
     def update_params(self, xs, y_true, lr):
         y_pred = [self(x) for x in xs]
 
@@ -158,9 +158,9 @@ Loss: {losses.data}""")
         losses.backward()
         for p in self.parameters():
             p.data += -lr * p.grad
-        
+
         return losses
-    
+
     def zero_grad(self):
         for p in self.parameters():
             p.grad = 0
@@ -197,11 +197,9 @@ if __name__ == "__main__":
         [.5, 1, 1],
         [1, 1, -1]
     ]
-    
+
     ys = [1, -1, -1, 1]
 
     n = Network(3, [2, 3, 1])
     n.train(xs, ys, epochs=400, lr=.01, verbose=True)
     [print(n(x)) for x in xs]
-
-
