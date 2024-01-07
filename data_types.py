@@ -181,9 +181,7 @@ Loss: {losses.data}""")
         return loss
 
 
-
 if __name__ == "__main__":
-    from draw import draw_dot
     a = Value(3)
     b = Value(4)
     c = a*b
