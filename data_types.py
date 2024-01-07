@@ -1,10 +1,9 @@
-import numpy as np
 import math
 import random
 
 
 class Value():
-    def __init__(self, data: int|float, children: tuple = (), operation='', label=''):
+    def __init__(self, data: int | float, children: tuple = (), operation='', label=''):
         self.data = data
         self._backward = lambda: None
         self.grad = 0
@@ -39,7 +38,7 @@ class Value():
         return other + (-self)
 
     def __radd__(self, other):
-        return self + other    
+        return self + other
 
     def __mul__(self, other):
         other = other if isinstance(other, Value) else Value(other)
@@ -79,7 +78,6 @@ class Value():
 
         return out
 
-
     def backward(self):
         self.grad = 1
         topo = []
@@ -95,6 +93,7 @@ class Value():
         unroll(self)
         for node in reversed(topo):
             node._backward()
+
 
 class Neuron():
     def __init__(self, number_inputs):
@@ -165,7 +164,6 @@ Loss: {losses.data}""")
         for p in self.parameters():
             p.grad = 0
 
-
     def loss(self, y_true, y_pred, method='mse'):
         mapping = {'mse': self.mse}
         try:
@@ -174,7 +172,6 @@ Loss: {losses.data}""")
             print('loss function not valid, using mse instead')
             loss = self.mse
         return loss(y_true, y_pred)
-
 
     def mse(self, y_true, y_pred):
         loss = sum((y_out - y_begin)**2 for y_begin, y_out in zip(y_true, y_pred))
